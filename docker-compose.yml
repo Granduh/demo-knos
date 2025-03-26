@@ -1,0 +1,34 @@
+services:
+  postgres_db:
+    container_name: postgres_db
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: khronoscloud
+      POSTGRES_PASSWORD: Khronos_2025
+      POSTGRES_DB: intl_knos_demo_db_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - postgres-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: account@khronoscloud.com
+      PGADMIN_DEFAULT_PASSWORD: Khronos2025
+    networks:
+      - postgres-network
+
+networks:
+  postgres-network:
+    driver: bridge
+
+volumes:
+  postgres_data: 

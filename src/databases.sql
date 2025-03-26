@@ -1,0 +1,14 @@
+CREATE TABLE task (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    completed BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE employee (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    correo VARCHAR(255) NOT NULL,
+    telefono VARCHAR(255) NOT NULL,
+    cargo VARCHAR(255) NOT NULL,
+    departmento VARCHAR(255) NOT NULL,
+);
