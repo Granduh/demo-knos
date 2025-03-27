@@ -1,52 +1,46 @@
 import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  BadRequestException,
-  Logger,
-} from '@nestjs/common';
+  // eslint-disable-next-line prettier/prettier
+  Body,  Controller,  Delete,  Get,  Param,  Post,  Put, HttpException, HttpStatus } from '@nestjs/common';
 import { TasksService } from '../services/tasks.service';
+import { Task } from '../entities/task.entity';
+import { CreateTaskDto } from '../dto/create-task.dto';
 
 @Controller('api/tasks')
 export class TasksController {
-  private readonly logger = new Logger(TasksController.name); //Debugging
   constructor(private tasksService: TasksService) {}
 
   @Get()
-  getAll() {
+  getAll(): Promise<Task[]> {
     return this.tasksService.findAll();
   }
 
   @Get(':id')
-  getOne(@Param('id') id: number) {
-    return this.tasksService.findOne(id);
+  async getOne(@Param('id') id: number): Promise<Task> {
+    const task = await this.tasksService.findOne(id);
+    if (!task) {
+      throw new HttpException('Tarea no encontrada', HttpStatus.NOT_FOUND);
+    }
+    return task;
   }
 
   @Post()
-  create(@Body() body: any) {
-    this.logger.debug(`Received body: ${JSON.stringify(body)}`);
-    if (!body) {
-      this.logger.error('Request body is undefined');
-      throw new BadRequestException('Request body is undefined');
-    }
-    if (!body.name) {
-      this.logger.error('Task name is missing');
-      throw new BadRequestException('Task name is missing');
-    }
+  create(@Body() body: CreateTaskDto): Promise<Task> {
     return this.tasksService.create(body);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() body: any) {
+  update(
+    @Param('id') id: number,
+    @Body() body: Partial<CreateTaskDto>,
+  ): Promise<Task> {
     return this.tasksService.update(id, body);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: number) {
+  async delete(@Param('id') id: number): Promise<{ Notification: string }> {
+    if (!Delete) {
+      throw new HttpException('Tarea no encontrada', HttpStatus.NOT_FOUND);
+    }
     return this.tasksService.remove(id);
   }
 }
