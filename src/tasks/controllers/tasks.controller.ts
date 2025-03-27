@@ -7,7 +7,7 @@ import { CreateTaskDto } from '../dto/create-task.dto';
 
 @Controller('api/tasks')
 export class TasksController {
-  constructor(private tasksService: TasksService) {}
+  constructor(private readonly tasksService: TasksService) {}
 
   @Get()
   getAll(): Promise<Task[]> {

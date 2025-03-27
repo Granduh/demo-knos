@@ -1,74 +1,41 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Task } from './../entities/task.entity';
-import { CreateTaskDto } from './../dto/create-task.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { TasksRepository } from '../repositories/tasks.repository';
+import { CreateTaskDto } from '../dto/create-task.dto';
+import { Task } from '../entities/task.entity';
 
 @Injectable()
 export class TasksService {
-  constructor(
-    @InjectRepository(Task) private tasksRepository: Repository<Task>,
-  ) {}
+  constructor(private readonly tasksRepository: TasksRepository) {}
 
-  findAll(): Promise<Task[]> {
-    try {
-      return this.tasksRepository.find();
-    } catch (error) {
-      throw new InternalServerErrorException('Error al obtener las tareas');
-    }
+  async findAll(): Promise<Task[]> {
+    return this.tasksRepository.findAll();
   }
 
-  findOne(id: number): Promise<Task | null> {
-    try {
-      return this.tasksRepository.findOne({ where: { id } });
-    } catch (error) {
+  async findOne(id: number): Promise<Task> {
+    const task = await this.tasksRepository.findOneById(id);
+    if (!task) {
       throw new NotFoundException('Tarea no encontrada');
     }
+    return task;
   }
 
   async create(body: CreateTaskDto): Promise<Task> {
-    try {
-      const newTask = this.tasksRepository.create(body);
-      return await this.tasksRepository.save(newTask);
-    } catch (error) {
-      throw new InternalServerErrorException('Error al crear la tarea');
-    }
+    return this.tasksRepository.createTask(body);
   }
 
   async update(id: number, body: Partial<CreateTaskDto>): Promise<Task> {
-    try {
-      const task = await this.tasksRepository.findOne({ where: { id } });
-      if (!task) {
-        throw new NotFoundException('Tarea no encontrada');
-      }
-      this.tasksRepository.merge(task, body);
-      return this.tasksRepository.save(task);
-    } catch (error) {
-      throw new InternalServerErrorException('Error al actualizar la tarea');
+    const updatedTask = await this.tasksRepository.updateTask(id, body);
+    if (!updatedTask) {
+      throw new NotFoundException('Tarea no encontrada');
     }
+    return updatedTask;
   }
 
   async remove(id: number): Promise<{ Notification: string }> {
-    try {
-      const task = await this.tasksRepository.findOne({ where: { id } });
-      if (!task) {
-        throw new NotFoundException('Tarea no encontrada');
-      }
-      await this.tasksRepository.delete(id);
-      return { Notification: 'La tarea se eliminó exitosamente' };
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      throw new InternalServerErrorException('Error al eliminar la tarea');
+    const deleted = await this.tasksRepository.deleteTask(id);
+    if (!deleted) {
+      throw new NotFoundException('Tarea no encontrada');
     }
+    return { Notification: 'La tarea se eliminó exitosamente' };
   }
 }
-
-// Investigar como Controlar los errores, TryCatch
-// Cambiar any por las clases definidas
