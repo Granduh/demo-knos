@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TasksModule } from './tasks/tasks.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SubtasksModule } from './tasks/subtasks/subtasks.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       retryAttempts: 10,
     }),
     TasksModule,
+    SubtasksModule,
   ],
   controllers: [],
   providers: [],

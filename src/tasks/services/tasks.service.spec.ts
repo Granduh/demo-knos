@@ -1,28 +1,30 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Test, TestingModule } from '@nestjs/testing';
 import { TasksService } from './tasks.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { Task } from './../entities/task.entity';
-import { Repository } from 'typeorm';
 import { TasksRepository } from '../repositories/tasks.repository';
 
 describe('TasksService', () => {
   let service: TasksService;
-  let taskRepository: TasksRepository;
+  let repository: TasksRepository;
+
+  const mockTasksRepository = {
+    findAll: jest.fn(),
+    findOneById: jest.fn(),
+    createTask: jest.fn(),
+    updateTask: jest.fn(),
+    deleteTask: jest.fn(),
+  }
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        TasksService,
-        {
-          provide: getRepositoryToken(Task), // Registro del repositorio
-          useClass: Repository, // Usamos la clase Repository de TypeORM como mock
-        },
-      ],
+      providers: [TasksService, {
+        provide: TasksRepository,
+        useValue: mockTasksRepository,
+      }
+    ],
     }).compile();
 
     service = module.get<TasksService>(TasksService);
-    taskRepository = module.get<TasksRepository>(getRepositoryToken(Task));
+    repository = module.get<TasksRepository>(TasksRepository);
   });
 
   it('should be defined', () => {
