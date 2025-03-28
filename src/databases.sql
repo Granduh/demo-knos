@@ -4,11 +4,10 @@ CREATE TABLE task (
     completed BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE employee (
+CREATE TABLE subtask (
     id SERIAL PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL,
-    correo VARCHAR(255) NOT NULL,
-    telefono VARCHAR(255) NOT NULL,
-    cargo VARCHAR(255) NOT NULL,
-    departmento VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    completed BOOLEAN DEFAULT FALSE,
+    taskId INTEGER NOT NULL,
+    CONSTRAINT fk_task FOREIGN KEY (taskId) REFERENCES task(id) ON DELETE CASCADE
 );

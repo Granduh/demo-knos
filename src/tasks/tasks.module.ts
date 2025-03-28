@@ -7,7 +7,7 @@ import { TasksRepository } from './repositories/tasks.repository';
 import { SubtasksModule } from './subtasks/subtasks.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Task]), forwardRef(()=> SubtasksModule)],
+  imports: [TypeOrmModule.forFeature([Task]), forwardRef(() => SubtasksModule)],
   providers: [TasksService, TasksRepository],
   controllers: [TasksController],
   exports: [TypeOrmModule],

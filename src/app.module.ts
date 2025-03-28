@@ -16,6 +16,7 @@ import { SubtasksModule } from './tasks/subtasks/subtasks.module';
       synchronize: false,
       retryDelay: 3000,
       retryAttempts: 10,
+      logging: true,
     }),
     TasksModule,
     SubtasksModule,

@@ -1,10 +1,11 @@
-import { IsString, IsBoolean, IsOptional } from 'class-validator';
+import { IsString, IsBoolean, IsOptional, IsNotEmpty } from 'class-validator';
 
 export class CreateTaskDto {
-  @IsString()
+  @IsNotEmpty({ message: 'El nombre de la tarea no puede estar vacío.' })
+  @IsString({ message: 'El nombre de la tarea debe ser un texto.' })
   name: string;
 
-  @IsBoolean()
+  @IsBoolean({ message: 'El estado de la tarea debe ser true o false.' })
   @IsOptional()
   completed?: boolean;
 }

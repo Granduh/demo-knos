@@ -1,6 +1,14 @@
 import {
-  // eslint-disable-next-line prettier/prettier
-  Body,  Controller,  Delete,  Get,  Param,  Post,  Put, HttpException, HttpStatus } from '@nestjs/common';
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { TasksService } from '../services/tasks.service';
 import { Task } from '../entities/task.entity';
 import { CreateTaskDto } from '../dto/create-task.dto';
