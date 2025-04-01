@@ -1,14 +1,15 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
+import { Subtask } from './entities/subtasks.entity';
 import { TasksService } from './services/tasks.service';
 import { TasksController } from './controllers/tasks.controller';
 import { TasksRepository } from './repositories/tasks.repository';
-import { SubtasksModule } from './subtasks/subtasks.module';
+import { SubtasksRepository } from './repositories/subtasks.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Task]), forwardRef(() => SubtasksModule)],
-  providers: [TasksService, TasksRepository],
+  imports: [TypeOrmModule.forFeature([Task, Subtask])],
+  providers: [TasksService, TasksRepository, SubtasksRepository],
   controllers: [TasksController],
   exports: [TypeOrmModule],
 })

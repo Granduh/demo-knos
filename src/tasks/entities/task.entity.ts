@@ -1,17 +1,20 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Subtask } from '../subtasks/entities/subtasks.entity';
+import { Subtask } from './subtasks.entity';
 
 @Entity()
 export class Task {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number;
 
   @Column()
   name: string;
 
   @Column({ default: false })
-  completed?: boolean;
+  completed?: boolean = false;
 
-  @OneToMany(() => Subtask, (subtask) => subtask.task, { cascade: true })
+  @OneToMany(() => Subtask, (subtask) => subtask.task, {
+    cascade: true,
+    eager: false,
+  })
   subtasks: Subtask[];
 }
