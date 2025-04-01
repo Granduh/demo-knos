@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Test, TestingModule } from '@nestjs/testing';
 import { TasksService } from './tasks.service';
 import { TasksRepository } from '../repositories/tasks.repository';
@@ -12,15 +13,17 @@ describe('TasksService', () => {
     createTask: jest.fn(),
     updateTask: jest.fn(),
     deleteTask: jest.fn(),
-  }
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [TasksService, {
-        provide: TasksRepository,
-        useValue: mockTasksRepository,
-      }
-    ],
+      providers: [
+        TasksService,
+        {
+          provide: TasksRepository,
+          useValue: mockTasksRepository,
+        },
+      ],
     }).compile();
 
     service = module.get<TasksService>(TasksService);

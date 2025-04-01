@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Injectable,
   InternalServerErrorException,
@@ -84,3 +85,6 @@ export class TasksService {
     }
   }
 }
+
+//error filter
+// interceptors

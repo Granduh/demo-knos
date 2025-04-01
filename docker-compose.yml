@@ -26,9 +26,30 @@ services:
     networks:
       - postgres-network
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    restart: always
+    environment:
+      KEYCLOAK_ADMIN: khronoscloud
+      KEYCLOAK_ADMIN_PASSWORD: Khronos_2025
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres_db:5432/intl_knos_demo_db_dev
+      KC_DB_USERNAME: khronoscloud
+      KC_DB_PASSWORD: Khronos_2025
+    ports:
+      - "8180:8080"
+    networks:
+      - postgres-network
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+    command:
+      - start-dev
+
 networks:
   postgres-network:
     driver: bridge
 
 volumes:
   postgres_data: 
+  keycloak_data:

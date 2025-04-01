@@ -1,6 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TasksModule } from './tasks/tasks.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import {
+  KeycloakConnectModule,
+  AuthGuard,
+  ResourceGuard,
+  RoleGuard,
+} from 'nest-keycloak-connect';
+import { KeycloakConfigService } from 'config/keycloak-config.service';
+import { APP_GUARD } from '@nestjs/core';
+import { ConfigModules } from 'config/config.module';
 
 @Module({
   imports: [
@@ -18,8 +27,25 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       logging: true,
     }),
     TasksModule,
+    KeycloakConnectModule.registerAsync({
+      useExisting: KeycloakConfigService,
+      imports: [ConfigModules],
+    }),
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ResourceGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RoleGuard,
+    },
+  ],
 })
 export class AppModule {}

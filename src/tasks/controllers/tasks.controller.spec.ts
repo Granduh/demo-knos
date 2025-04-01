@@ -4,6 +4,7 @@ import { TasksService } from '../services/tasks.service';
 
 describe('TasksController', () => {
   let controller: TasksController;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let service: TasksService;
 
   // Mock del servicio con métodos simulados
